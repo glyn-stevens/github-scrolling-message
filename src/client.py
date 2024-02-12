@@ -2,7 +2,7 @@ import os
 from typing import Literal
 import requests
 import base64
-
+GITHUB_PAT_ENV_VAR = "GITHUB_PERSONAL_ACCESS_TOKEN"
 def commit_character_to_file(username: str, repo: str, path: str, token: str, character: Literal['⬛', '⬜']):
     """Commit a single character to a file in a GitHub repo."""
     url = f"https://api.github.com/repos/{username}/{repo}/contents/{path}"
@@ -37,5 +37,7 @@ def commit_character_to_file(username: str, repo: str, path: str, token: str, ch
 username = "glyn-stevens"
 repo = "gitlab-scrolling-message"
 path = "message.txt"
-token = os.getenv("GITHUB_PERSONAL_ACCESS_TOKEN")
+token = os.getenv(GITHUB_PAT_ENV_VAR)
+if not token:
+    raise ValueError(f"Expected environment variable {GITHUB_PAT_ENV_VAR}")
 commit_character_to_file(username, repo, path, token, '⬛')
