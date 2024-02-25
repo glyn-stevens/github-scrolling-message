@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Scrolling message on gitlab commit page"
 authors = ["glyn-stevens <glynst@gmail.com>"]
 readme = "README.md"
-packages = [{include = "scrolling_message"}]
+packages = [{include = "lambda_func", from = "src"}, {include = "precalculation", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -14,6 +14,7 @@ numpy = "^1.26.4"
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.8.0"
 ruff = "^0.2.1"
+pytest = "^8.0.2"
 
 [build-system]
 requires = ["poetry-core"]
