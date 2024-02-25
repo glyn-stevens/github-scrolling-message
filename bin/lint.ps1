@@ -1,4 +1,4 @@
-$TARGER_DIR="src"
+$TARGER_DIR=("src", "tests")
 
 "`nruff:"
 poetry run ruff format $TARGER_DIR
