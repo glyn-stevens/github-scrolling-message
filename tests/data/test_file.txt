@@ -1,1 +1,1 @@
-A test file
+The test message in the test file
