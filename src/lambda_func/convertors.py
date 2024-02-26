@@ -10,7 +10,7 @@ def pixel_array_to_string(
     exmpty_pixel: str = MSG_EMPTY_PIXEL,
 ) -> str:
     if num_pixels_to_include < 1:
-        return
+        return ""
     rows, cols = pixel_array.shape
     extra_cells = num_pixels_to_include % rows
     requied_cols = num_pixels_to_include // rows + (extra_cells > 0)
