@@ -1,6 +1,8 @@
 from datetime import date
 import os
 from pathlib import Path
+
+import numpy as np
 from lambda_func.client import RepositoriesAPI
 
 from lambda_func.constants import (
@@ -10,13 +12,14 @@ from lambda_func.constants import (
     MESSAGE_RECORD_FILE,
     MSG_FILLED_PIXEL,
     START_DATE,
+    ENCODED_MESSAGE_FILE,
 )
 from lambda_func.convertors import pixel_array_to_string
 
 
 def lambda_handler(event, context) -> None:
     """Main entry point for lambda function"""
-    message_pixel_array = read_message()
+    message_pixel_array = np.load(ENCODED_MESSAGE_FILE)
     days_from_start = (date.today() - START_DATE).days
     pixel_string_up_to_today = pixel_array_to_string(
         message_pixel_array, num_pixels_to_include=days_from_start
@@ -39,7 +42,7 @@ def commit_message_to_file(
     message: str, file_path: Path, repo_api: RepositoriesAPI
 ) -> None:
     # Get the current file SHA (required to overwrite it)
-    response = repo_api.get_file_content(file_path)
+    response = repo_api.get_file(file_path)
     current_content_sha = response.json()["sha"]
 
-    repo_api.put_content_to_file(file_path, message, current_content_sha)
+    repo_api.put_file(file_path, message, current_content_sha)
