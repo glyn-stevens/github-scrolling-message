@@ -12,19 +12,11 @@ from precalculation.char_to_pixel import CHAR_TO_PIXELS
 def encode_and_save_message(
     input_msg: Path, test_output_file_path: Path, encoded_message_file_path: Path
 ):
-    message = get_message(input_msg)
+    message = input_msg.read_text()
     pixel_array = encode_message_to_array(message, CHAR_TO_PIXELS)
     np.save(str(encoded_message_file_path), pixel_array)
-    num_pixels = pixel_array.size
-    pixels_as_string = pixel_array_to_string(pixel_array, num_pixels)
-    with open(test_output_file_path, "w", encoding="utf-8") as f:
-        f.write(pixels_as_string)
-
-
-def get_message(file_path: Path):
-    with open(file_path, "r") as f:
-        message = f.read()
-    return message
+    pixels_as_string = pixel_array_to_string(pixel_array, pixel_array.size)
+    test_output_file_path.write_text(pixels_as_string, encoding="utf-8")
 
 
 def char_to_array(char: str, char_to_pixels: dict) -> np.ndarray:
