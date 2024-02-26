@@ -13,13 +13,13 @@ class RepositoriesAPI:
         self.repo = repo
         self.token = token
 
-    def get_url(self, suffix: str) -> str:
+    def _get_url(self, suffix: str) -> str:
         return f"https://api.github.com/repos/{self.username}/{self.repo}/{suffix.strip('/')}"
 
-    def get_file_content(self, file_path: Path) -> requests.Response:
+    def get_file(self, file_path: Path) -> requests.Response:
         """Response for API call to get file content from repo
         https://docs.github.com/en/rest/repos/contents"""
-        url = self.get_url(f"/contents/{str(file_path)}")
+        url = self._get_url(f"/contents/{str(file_path)}")
         headers = {
             "Authorization": f"token {self.token}",
             "Accept": "application/vnd.github.v3+json",
@@ -32,7 +32,7 @@ class RepositoriesAPI:
             )
         return response
 
-    def put_content_to_file(
+    def put_file(
         self,
         file_path: Path,
         new_content: str,
@@ -43,7 +43,7 @@ class RepositoriesAPI:
         and creating a commit to the repo
         https://docs.github.com/en/rest/repos/contents"""
 
-        url = self.get_url(f"/contents/{str(file_path)}")
+        url = self._get_url(f"/contents/{str(file_path)}")
         headers = {
             "Authorization": f"token {self.token}",
             "Accept": "application/vnd.github.v3+json",
