@@ -10,6 +10,7 @@ TEST_DATA_DIR = TEST_DIR / "data"
 def test_message_file() -> Path:
     return TEST_DATA_DIR / "test_file.txt"
 
+
 @fixture
 def repo_root_dir() -> Path:
     return ROOT_DIR
