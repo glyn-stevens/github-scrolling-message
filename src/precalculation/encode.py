@@ -20,7 +20,7 @@ def encode_and_save_message(
 
 
 def char_to_array(char: str, char_to_pixels: dict) -> np.ndarray:
-    """Chararacter to numpy 6x7 array
+    """Chararacter to numpy 6x7 array of 1s and 0s
     Character 5x5, with 2 rows padding below and 1 row padding to the right
     If char isn't in char_to_pixels then blank space is shown"""
     if char in char_to_pixels:

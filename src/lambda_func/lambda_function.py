@@ -10,7 +10,6 @@ from lambda_func.constants import (
     GITHUB_REPO,
     GITHUB_USERNAME,
     MESSAGE_RECORD_FILE,
-    MSG_FILLED_PIXEL,
     START_DATE,
     ENCODED_MESSAGE_FILE,
 )
@@ -20,14 +19,27 @@ from lambda_func.convertors import pixel_array_to_string
 def lambda_handler(event, context) -> None:
     """Main entry point for lambda function"""
     message_pixel_array = np.load(ENCODED_MESSAGE_FILE)
-    days_from_start = (date.today() - START_DATE).days
+    days_from_start = get_days_from_start(date.today, START_DATE)
     pixel_string_up_to_today = pixel_array_to_string(
-        message_pixel_array, num_pixels_to_include=days_from_start
+        message_pixel_array, num_pixels_to_include=days_from_start + 1
     )
-    if pixel_string_up_to_today[-1] == MSG_FILLED_PIXEL:
+    if commit_on_day(message_pixel_array, days_from_start):
         # Pixel for today is dark, so we need to commit to file
         repo_api = init_repo_api()
         commit_message_to_file(pixel_string_up_to_today, MESSAGE_RECORD_FILE, repo_api)
+
+
+def get_days_from_start(day, start):
+    return max((day - start).days, 0)
+
+
+def commit_on_day(message_pixel_array: np.ndarray, idx: int) -> bool:
+    row = idx % message_pixel_array.shape[0]
+    col = idx // message_pixel_array.shape[0]
+    try:
+        return bool(message_pixel_array[row, col])
+    except IndexError:
+        return False
 
 
 def init_repo_api():

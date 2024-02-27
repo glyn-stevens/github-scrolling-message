@@ -3,12 +3,10 @@ from pathlib import Path
 from lambda_func.client import RepositoriesAPI
 
 
-def test_get_file(
-    repo_api: RepositoriesAPI, test_message_file: Path, repo_root_dir: Path
-):
-    expected_msg = test_message_file.read_text()
+def test_get_file(repo_api: RepositoriesAPI, message_file: Path, repo_root_dir: Path):
+    expected_msg = message_file.read_text()
 
-    response = repo_api.get_file(test_message_file.relative_to(repo_root_dir))
+    response = repo_api.get_file(message_file.relative_to(repo_root_dir))
 
     assert response.status_code == 200
     decoded_content = decode_content(response)
@@ -19,10 +17,8 @@ def decode_content(response):
     return base64.b64decode(response.json()["content"]).decode("utf-8")
 
 
-def test_put_file(
-    repo_api: RepositoriesAPI, test_message_file: Path, repo_root_dir: Path
-):
-    file_rel_path = test_message_file.relative_to(repo_root_dir)
+def test_put_file(repo_api: RepositoriesAPI, message_file: Path, repo_root_dir: Path):
+    file_rel_path = message_file.relative_to(repo_root_dir)
     get_file_response = repo_api.get_file(file_rel_path)
     current_sha = get_file_response.json()["sha"]
     original_msg = decode_content(get_file_response)
