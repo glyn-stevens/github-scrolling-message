@@ -223,6 +223,13 @@ CHAR_TO_PIXELS = {
         " X   ",
         "X    ",
     ],
+    "-": [
+        "     ",
+        "     ",
+        "XXXXX",
+        "     ",
+        "     ",
+    ],
 }
 """Map of upper case characters and basic punctuation to unispaced 5 x 5 grid of pixels, 
 where a full pixel is represented by an X and an empty pixel by a space ' '"""

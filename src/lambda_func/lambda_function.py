@@ -24,7 +24,6 @@ def lambda_handler(event, context) -> None:
         message_pixel_array, num_pixels_to_include=days_from_start + 1
     )
     if commit_on_day(message_pixel_array, days_from_start):
-        # Pixel for today is dark, so we need to commit to file
         repo_api = init_repo_api()
         commit_message_to_file(pixel_string_up_to_today, MESSAGE_RECORD_FILE, repo_api)
 
