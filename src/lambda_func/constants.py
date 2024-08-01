@@ -13,7 +13,7 @@ OUTPUT_DIR = Path.cwd() / "output"
 INPUT_MESSAGE_FILE = DATA_DIR / "message_raw.txt"
 """Raw message string to be encoded"""
 
-ENCODED_MESSAGE_FILE = DATA_DIR / "message_encoded.npy"
+ENCODED_MESSAGE_FILE = DATA_DIR / "message_encoded.txt"
 """Store of the full raw message encoded as pixels"""
 
 FULL_PIXELLATED_MESSAGE_FILE = DATA_DIR / "message_pixellated.txt"

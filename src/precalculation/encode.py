@@ -14,9 +14,15 @@ def encode_and_save_message(
 ):
     message = input_msg.read_text()
     pixel_array = encode_message_to_array(message, CHAR_TO_PIXELS)
-    np.save(str(encoded_message_file_path), pixel_array)
-    pixels_as_string = pixel_array_to_string(pixel_array, pixel_array.size)
+    save_pixel_array_as_text(encoded_message_file_path, pixel_array)
+    pixels_as_string = pixel_array_to_string(pixel_array.tolist(), pixel_array.size)
     test_output_file_path.write_text(pixels_as_string, encoding="utf-8")
+
+
+def save_pixel_array_as_text(file_path: Path, pixel_array: np.ndarray) -> None:
+    with open(file_path, "w") as f:
+        for row in pixel_array:
+            f.write("".join(map(str, row.astype(int))) + "\n")
 
 
 def char_to_array(char: str, char_to_pixels: dict) -> np.ndarray:
