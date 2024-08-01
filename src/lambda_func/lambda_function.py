@@ -41,7 +41,7 @@ def commit_on_day(message_pixel_array: np.ndarray, idx: int) -> bool:
         return False
 
 
-def init_repo_api():
+def init_repo_api() -> RepositoriesAPI:
     token = os.getenv(GITHUB_PAT_ENV_VAR)
     if not token:
         raise ValueError(f"Expected environment variable {GITHUB_PAT_ENV_VAR}")
