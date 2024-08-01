@@ -1,1 +1,1 @@
-New message to put to file
+The test message in the test file
