@@ -1,5 +1,6 @@
 from pathlib import Path
-import requests  # type: ignore
+import urllib3
+import json
 import base64
 
 
@@ -12,11 +13,12 @@ class RepositoriesAPI:
         self.username = username
         self.repo = repo
         self.token = token
+        self.http = urllib3.PoolManager()
 
     def _get_url(self, suffix: str) -> str:
         return f"https://api.github.com/repos/{self.username}/{self.repo}/{suffix.strip('/')}"
 
-    def get_file(self, file_path: Path) -> requests.Response:
+    def get_file(self, file_path: Path) -> dict:
         """Response for API call to get file content from repo
         https://docs.github.com/en/rest/repos/contents"""
         url = self._get_url(f"/contents/{file_path.as_posix()}")
@@ -24,13 +26,14 @@ class RepositoriesAPI:
             "Authorization": f"token {self.token}",
             "Accept": "application/vnd.github.v3+json",
         }
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()
-        if response.status_code != 200:
+        response = self.http.request("GET", url, headers=headers)
+
+        if response.status != 200:
             raise ValueError(
-                f"Expected response to either be OK or dealt with by method raise_for_status, got {response.status_code}"
+                f"Expected 200 OK, got {response.status} with body {response.data.decode()}"
             )
-        return response
+
+        return json.loads(response.data.decode())
 
     def put_file(
         self,
@@ -47,6 +50,7 @@ class RepositoriesAPI:
         headers = {
             "Authorization": f"token {self.token}",
             "Accept": "application/vnd.github.v3+json",
+            "Content-Type": "application/json",
         }
         encoded_content = base64.b64encode(new_content.encode("utf-8")).decode("utf-8")
 
@@ -56,9 +60,13 @@ class RepositoriesAPI:
             "sha": current_content_sha,
         }
 
-        response = requests.put(url, headers=headers, json=data)
-        if response.status_code != 200:
+        response = self.http.request(
+            "PUT", url, headers=headers, body=json.dumps(data).encode("utf-8")
+        )
+
+        if response.status != 200:
             raise ValueError(
-                f"Expected response to either be OK or dealt with by method raise_for_status, got {response.status_code}"
+                f"Expected 200 OK, got {response.status} with body {response.data.decode()}"
             )
-        return response
+
+        return json.loads(response.data.decode())

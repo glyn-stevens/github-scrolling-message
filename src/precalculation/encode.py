@@ -56,7 +56,7 @@ def main():
     encode_and_save_message(
         INPUT_MESSAGE_FILE, FULL_PIXELLATED_MESSAGE_FILE, ENCODED_MESSAGE_FILE
     )
-    
+
 
 if __name__ == "__main__":
     main()

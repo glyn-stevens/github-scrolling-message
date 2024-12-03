@@ -18,7 +18,7 @@ from lambda_func.convertors import pixel_array_to_string
 def lambda_handler(event, context) -> None:
     """Main entry point for lambda function"""
     message_pixel_array = load_pixel_array(ENCODED_MESSAGE_FILE)
-    days_from_start = get_days_from_start(date.today, START_DATE)
+    days_from_start = get_days_from_start(date.today(), START_DATE)
     pixel_string_up_to_today = pixel_array_to_string(
         message_pixel_array, num_pixels_to_include=days_from_start + 1
     )
@@ -32,7 +32,7 @@ def load_pixel_array(file_path: Path) -> list[list[int]]:
         return [list(map(int, line.strip().split())) for line in f.readlines()]
 
 
-def get_days_from_start(day, start):
+def get_days_from_start(day: date, start: date):
     return max((day - start).days, 0)
 
 
@@ -59,6 +59,6 @@ def commit_message_to_file(
 ) -> None:
     # Get the current file SHA (required to overwrite it)
     response = repo_api.get_file(file_path)
-    current_content_sha = response.json()["sha"]
+    current_content_sha = response["sha"]
 
     repo_api.put_file(file_path, message, current_content_sha)

@@ -8,20 +8,20 @@ def test_get_file(repo_api: RepositoriesAPI, message_file: Path, repo_root_dir: 
 
     response = repo_api.get_file(message_file.relative_to(repo_root_dir))
 
-    assert response.status_code == 200
-    decoded_content = decode_content(response)
+    assert "content" in response, "Response missing 'content' key"
+    decoded_content = decode_content(response["content"])
     assert decoded_content == expected_msg
 
 
-def decode_content(response):
-    return base64.b64decode(response.json()["content"]).decode("utf-8")
+def decode_content(encoded_content: str) -> str:
+    return base64.b64decode(encoded_content).decode("utf-8")
 
 
 def test_put_file(repo_api: RepositoriesAPI, message_file: Path, repo_root_dir: Path):
     file_rel_path = message_file.relative_to(repo_root_dir)
     get_file_response = repo_api.get_file(file_rel_path)
-    current_sha = get_file_response.json()["sha"]
-    original_msg = decode_content(get_file_response)
+    current_sha = get_file_response["sha"]
+    original_msg = decode_content(get_file_response["content"])
     new_msg = "New message to put to file"
     assert original_msg != new_msg, "Test should be trying to change the file content?"
 
@@ -32,14 +32,15 @@ def test_put_file(repo_api: RepositoriesAPI, message_file: Path, repo_root_dir: 
         current_content_sha=current_sha,
         commit_message="Test put file via API - set to new message",
     )
+
     try:
-        assert put_response.status_code == 200
+        assert "commit" in put_response, "Response missing 'commit' key"
         new_get_file_response = repo_api.get_file(file_rel_path)
         assert (
-            decode_content(new_get_file_response) == new_msg
+            decode_content(new_get_file_response["content"]) == new_msg
         ), "New message not put correctly?"
     finally:
-        new_sha = new_get_file_response.json()["sha"]
+        new_sha = new_get_file_response["sha"]
         repo_api.put_file(
             file_rel_path,
             new_content=original_msg,
