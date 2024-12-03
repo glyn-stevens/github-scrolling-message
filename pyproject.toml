@@ -16,6 +16,9 @@ mypy = "^1.8.0"
 ruff = "^0.2.1"
 pytest = "^8.0.2"
 
+[tool.poetry.scripts]
+encode = "src.precalculation.encode:main"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

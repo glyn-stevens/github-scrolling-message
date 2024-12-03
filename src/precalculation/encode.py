@@ -51,7 +51,12 @@ def encode_message_to_array(message: str, char_to_pixels: dict) -> np.ndarray:
     return np.hstack(arrays)
 
 
-if __name__ == "__main__":
+def main():
+    print("🪄 Encoding message...")
     encode_and_save_message(
         INPUT_MESSAGE_FILE, FULL_PIXELLATED_MESSAGE_FILE, ENCODED_MESSAGE_FILE
     )
+    
+
+if __name__ == "__main__":
+    main()
