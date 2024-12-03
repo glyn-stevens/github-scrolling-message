@@ -2,7 +2,7 @@ from datetime import date
 from pathlib import Path
 
 
-START_DATE = date(2024, 3, 3)
+START_DATE = date(2024, 12, 3)
 """First day message will be printed, should be a day corresponding to the top row for the 
 github contribution dot-matrix (as of Feb 2024, this is a Sunday)"""
 
@@ -10,13 +10,16 @@ DATA_DIR = Path.cwd() / "data"
 
 OUTPUT_DIR = Path.cwd() / "output"
 
+LAMBDA_FUNC_DIR = Path(__file__).parent
+
 INPUT_MESSAGE_FILE = DATA_DIR / "message_raw.txt"
 """Raw message string to be encoded"""
 
-ENCODED_MESSAGE_FILE = DATA_DIR / "message_encoded.txt"
-"""Store of the full raw message encoded as pixels"""
+ENCODED_MESSAGE_FILE = LAMBDA_FUNC_DIR / "message_encoded.txt"
+"""Store of the full raw message encoded as ones/zeros"""
 
 FULL_PIXELLATED_MESSAGE_FILE = DATA_DIR / "message_pixellated.txt"
+"""Store of the full raw message encoded as pixels"""
 
 MESSAGE_RECORD_FILE = OUTPUT_DIR / "message_record.txt"
 """Path to the file in which the message printed in the github dot matrix so far will be recorded in"""
