@@ -3,6 +3,10 @@
 Want to display a message to the world in your github commit pixel grid?
 This will auto-commit once a day to this repo in a way that will scroll your message (faintly) across the pixel grid.
 
+Want to see what it'd look like? 
+Check [my github page](https://github.com/glyn-stevens) and scroll down to find the contributions pixel grid. 
+You should see the results!
+
 Use
 ---
 
