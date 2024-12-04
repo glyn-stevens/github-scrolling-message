@@ -39,6 +39,8 @@ def get_days_from_start(day: date, start: date):
 
 
 def commit_on_day(message_pixel_array: list[list[int]], idx: int) -> bool:
+    if idx < 0:
+        return False
     rows = len(message_pixel_array)
     cols = len(message_pixel_array[0])
     row = idx % rows

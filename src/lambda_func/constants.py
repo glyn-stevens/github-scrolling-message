@@ -2,7 +2,7 @@ from datetime import date
 from pathlib import Path
 
 
-START_DATE = date(2024, 12, 3)
+START_DATE = date(2024, 12, 8)
 """First day message will be printed, should be a day corresponding to the top row for the 
 github contribution dot-matrix (as of Feb 2024, this is a Sunday)"""
 

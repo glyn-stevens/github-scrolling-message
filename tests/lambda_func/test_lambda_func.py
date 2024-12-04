@@ -30,3 +30,7 @@ def test_commit_on_day():
 
 def test_commit_on_day_out_of_range():
     assert not commit_on_day(TEST_ARRAY, 9), "Expected False for out-of-range index"
+    
+    
+def test_commit_on_day_negative():
+    assert not commit_on_day(TEST_ARRAY, -5), "Expected False for negative index"
