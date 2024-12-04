@@ -8,7 +8,7 @@ from lambda_func.constants import (
     GITHUB_PAT_ENV_VAR,
     GITHUB_REPO,
     GITHUB_USERNAME,
-    MESSAGE_RECORD_FILE,
+    RELATIVE_MESSAGE_RECORD_FILE,
     START_DATE,
     ENCODED_MESSAGE_FILE,
 )
@@ -24,7 +24,9 @@ def lambda_handler(event, context) -> None:
     )
     if commit_on_day(message_pixel_array, days_from_start):
         repo_api = init_repo_api()
-        commit_message_to_file(pixel_string_up_to_today, MESSAGE_RECORD_FILE, repo_api)
+        commit_message_to_file(
+            pixel_string_up_to_today, RELATIVE_MESSAGE_RECORD_FILE, repo_api
+        )
 
 
 def load_pixel_array(file_path: Path) -> list[list[int]]:

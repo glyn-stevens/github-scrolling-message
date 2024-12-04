@@ -21,8 +21,8 @@ ENCODED_MESSAGE_FILE = LAMBDA_FUNC_DIR / "message_encoded.txt"
 FULL_PIXELLATED_MESSAGE_FILE = DATA_DIR / "message_pixellated.txt"
 """Store of the full raw message encoded as pixels"""
 
-MESSAGE_RECORD_FILE = OUTPUT_DIR / "message_record.txt"
-"""Path to the file in which the message printed in the github dot matrix so far will be recorded in"""
+RELATIVE_MESSAGE_RECORD_FILE = Path("data") / "message_record.txt"
+"""Relative Path to the file in which the message printed in the github dot matrix so far will be recorded in"""
 
 MSG_FILLED_PIXEL = "⬛"
 """Default filled pixel to be printed in the output message file"""
