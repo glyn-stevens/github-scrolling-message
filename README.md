@@ -36,6 +36,7 @@ Development
 - Add CI/CD pipeline in github running lint and tests that we already have
 - Remove the constants from `constants.py` that aren't used by the lambda
 - Test remaining untested functions in lambda_function.py
+- Consider using logging rather than print statements
 
 ### Lint
 ```shell
