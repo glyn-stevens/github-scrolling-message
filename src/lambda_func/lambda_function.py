@@ -34,6 +34,7 @@ def lambda_handler(event, context) -> None:
         print("No commit necessary today")
     print("Goodbye")
 
+
 def load_pixel_array(file_path: Path) -> list[list[int]]:
     with open(file_path, "r") as f:
         return [list(map(int, line.strip().split())) for line in f.readlines()]
