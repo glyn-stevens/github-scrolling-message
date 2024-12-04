@@ -19,12 +19,13 @@ def lambda_handler(event, context) -> None:
     """Main entry point for lambda function"""
     print("Running lambda handler...")
     message_pixel_array = load_pixel_array(ENCODED_MESSAGE_FILE)
-    days_from_start = get_days_from_start(date.today(), START_DATE)
-    pixel_string_up_to_today = pixel_array_to_string(
-        message_pixel_array, num_pixels_to_include=days_from_start + 1
-    )
+    days_from_start = (date.today() - START_DATE).days
+    print(f"We've been running for {days_from_start} days.")
     if commit_on_day(message_pixel_array, days_from_start):
         print("Filled in pixel required today. Committing to repo...")
+        pixel_string_up_to_today = pixel_array_to_string(
+            message_pixel_array, num_pixels_to_include=days_from_start + 1
+        )
         repo_api = init_repo_api()
         commit_message_to_file(
             pixel_string_up_to_today, RELATIVE_MESSAGE_RECORD_FILE, repo_api
@@ -41,7 +42,7 @@ def load_pixel_array(file_path: Path) -> list[list[int]]:
 
 
 def get_days_from_start(day: date, start: date):
-    return max((day - start).days, 0)
+    return (day - start).days
 
 
 def commit_on_day(message_pixel_array: list[list[int]], idx: int) -> bool:
