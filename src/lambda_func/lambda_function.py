@@ -17,17 +17,22 @@ from lambda_func.convertors import pixel_array_to_string
 
 def lambda_handler(event, context) -> None:
     """Main entry point for lambda function"""
+    print("Running lambda handler...")
     message_pixel_array = load_pixel_array(ENCODED_MESSAGE_FILE)
     days_from_start = get_days_from_start(date.today(), START_DATE)
     pixel_string_up_to_today = pixel_array_to_string(
         message_pixel_array, num_pixels_to_include=days_from_start + 1
     )
     if commit_on_day(message_pixel_array, days_from_start):
+        print("Filled in pixel required today. Committing to repo...")
         repo_api = init_repo_api()
         commit_message_to_file(
             pixel_string_up_to_today, RELATIVE_MESSAGE_RECORD_FILE, repo_api
         )
-
+        print(f"Committed to repo {GITHUB_REPO}")
+    else:
+        print("No commit necessary today")
+    print("Goodbye")
 
 def load_pixel_array(file_path: Path) -> list[list[int]]:
     with open(file_path, "r") as f:
