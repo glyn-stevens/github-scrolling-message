@@ -13,32 +13,44 @@ from lambda_func.constants import (
     ENCODED_MESSAGE_FILE,
 )
 from lambda_func.convertors import pixel_array_to_string
+import logging
+
+logger = logging.getLogger()
+if len(logger.handlers) > 0:
+    # The Lambda environment pre-configures a handler logging to stderr. If a handler is already configured,
+    # `.basicConfig` does not execute. Thus we set the level directly.
+    logger.setLevel(logging.INFO)
+else:
+    logging.basicConfig(level=logging.INFO)
 
 
 def lambda_handler(event, context) -> None:
     """Main entry point for lambda function"""
-    print("Running lambda handler...")
+    logger.info("Running lambda handler...")
     message_pixel_array = load_pixel_array(ENCODED_MESSAGE_FILE)
     days_from_start = (date.today() - START_DATE).days
-    print(f"We've been running for {days_from_start} days.")
+    logger.info(f"We've been running for {days_from_start} days.")
     if commit_on_day(message_pixel_array, days_from_start):
-        print("Filled in pixel required today. Committing to repo...")
+        logger.info("Filled in pixel required today. Committing to repo...")
         pixel_string_up_to_today = pixel_array_to_string(
             message_pixel_array, num_pixels_to_include=days_from_start + 1
         )
         repo_api = init_repo_api()
-        commit_message_to_file(
-            pixel_string_up_to_today, RELATIVE_MESSAGE_RECORD_FILE, repo_api
-        )
-        print(f"Committed to repo {GITHUB_REPO}")
+        try:
+            commit_message_to_file(
+                pixel_string_up_to_today, RELATIVE_MESSAGE_RECORD_FILE, repo_api
+            )
+            logger.info(f"Committed to repo {GITHUB_REPO}")
+        except ValueError as e:
+            logger.error(f"Failed to commit to repo. Error: {e}")
     else:
-        print("No commit necessary today")
-    print("Goodbye")
+        logger.info("No commit necessary today")
+    logger.info("Goodbye")
 
 
 def load_pixel_array(file_path: Path) -> list[list[int]]:
     with open(file_path, "r") as f:
-        return [list(map(int, line.strip().split())) for line in f.readlines()]
+        return [[int(char) for char in line.strip()] for line in f.readlines()]
 
 
 def get_days_from_start(day: date, start: date):
@@ -71,5 +83,4 @@ def commit_message_to_file(
     # Get the current file SHA (required to overwrite it)
     response = repo_api.get_file(file_path)
     current_content_sha = response["sha"]
-
     repo_api.put_file(file_path, message, current_content_sha)

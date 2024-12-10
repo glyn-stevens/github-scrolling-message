@@ -1,8 +1,7 @@
 from pathlib import Path
 from pytest import fixture
 
-TEST_DIR = Path(__file__).parent
-TEST_DATA_DIR = TEST_DIR / "data"
+from tests import TEST_DIR, TEST_DATA_DIR
 
 
 @fixture

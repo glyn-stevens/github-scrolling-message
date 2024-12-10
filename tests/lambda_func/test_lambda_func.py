@@ -1,8 +1,24 @@
+from pathlib import Path
+
 import numpy as np
 import pytest
 from lambda_func.constants import MSG_EMPTY_PIXEL, MSG_FILLED_PIXEL
 from lambda_func.convertors import pixel_array_to_string
-from lambda_func.lambda_function import commit_on_day
+from lambda_func.lambda_function import commit_on_day, load_pixel_array
+
+
+def test_load_pixel_array(encoded_message_file: Path):
+    expected = [
+        [1, 1, 1, 1, 1, 0],
+        [0, 0, 1, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [1, 1, 1, 1, 1, 1],
+    ]
+    loaded = load_pixel_array(encoded_message_file)
+    assert loaded == expected
 
 
 @pytest.mark.parametrize("days", [0, 1, 5, 7, 10, 20, 100, 1000])
